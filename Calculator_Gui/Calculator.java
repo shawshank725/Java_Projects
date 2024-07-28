@@ -18,7 +18,7 @@ public class Calculator implements ActionListener{
         frame = new JFrame();        
         panel_2 = new JPanel();
         panel_3 = new JPanel();
-        textarea = new JTextArea(5,16);
+        textarea = new JTextArea(4,15);
         scroll = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         gridLayout = new GridLayout(6,4);
@@ -28,6 +28,7 @@ public class Calculator implements ActionListener{
         textarea.setFont(new Font("Crashnumberinggothic-MAjp", Font.BOLD, 20));
         Image icon = Toolkit.getDefaultToolkit().getImage("calc.jpg");    
         frame.setIconImage(icon);   
+        textarea.setMargin(new Insets(10, 10, 10, 10));
 
         button_1 = new JButton("1");        button_2 = new JButton("2");
         button_3 = new JButton("3");        button_4 = new JButton("4");
@@ -172,12 +173,13 @@ public class Calculator implements ActionListener{
         }
         else if (buttonText.equals("()")){
             String exp = textarea.getText();
-            if (exp.endsWith("(") || exp.equals("") || exp.equals("*") ||exp.equals("/") || exp.equals("-") || exp.equals("*") || ((check_frequency(exp, "(") == 0) || (check_frequency(exp, "(") == check_frequency(exp, ")")))){
+            if ((isdigit(exp) && (check_frequency(exp, "(") == 0) && (!exp.isEmpty())) ){
+                textarea.setText(exp+"*(");
+            }
+            else if (exp.endsWith("(") || exp.equals("") || exp.equals("*") ||exp.equals("/") || exp.equals("-") || exp.equals("+") || ((check_frequency(exp, "(") == 0) || (check_frequency(exp, "(") == check_frequency(exp, ")")))){
                 textarea.setText(exp+"(");
             }
-            /*else if ((check_frequency(exp, "(")> 0) && (exp.endsWith("1") ||exp.endsWith("2") ||exp.endsWith("3") ||exp.endsWith("4") ||exp.endsWith("5") ||exp.endsWith("6") ||exp.endsWith("7") ||exp.endsWith("8") ||exp.endsWith("9") ||exp.endsWith("0"))){
-                textarea.setText(exp+"*(");
-            }*/
+            
             else if (check_frequency(exp, "(") > check_frequency(exp, ")")) {
                 textarea.setText(exp+")");
             }
@@ -207,5 +209,19 @@ public class Calculator implements ActionListener{
             }
         }
         return index+1;
+    }
+
+    public static boolean isdigit(String a){
+        boolean bro = true;
+        for (int i = 0; i < a.length(); i++){
+            if ((a.charAt(i)=='+' || a.charAt(i)=='-' || a.charAt(i)=='/' || a.charAt(i)=='*' || a.charAt(i)=='(' || a.charAt(i)==')' )){
+                bro = false;
+                break;
+            }
+            else {
+                bro = true;
+            }
+        }
+        return bro;
     }
 }
